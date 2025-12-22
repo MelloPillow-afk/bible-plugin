@@ -1,1 +1,42 @@
 @import "tailwindcss";
+
+:root {
+  /* Brand */
+  --brand-accent: #ff3d4d;
+  --brand-warm-neutral: #f6efee;
+  --brand-yv-logot-text: #121212;
+
+  /* Canvas */
+  --canvas-primary: #ffffff;
+  --canvas-secondary: #f6f4f4;
+
+  /* Surface */
+  --surface-primary: #f6f4f4;
+  --surface-secondary: #ffffff;
+  --surface-tertiary: #fcfafa;
+  --surface-quaternary: #edebeb;
+
+  /* Text */
+  --text-everwhite: #ffffff;
+  --text-everblack: #121212;
+  --text-primary: #121212;
+  --text-muted: #636161;
+  --text-inverted: #ffffff;
+
+  /* Button */
+  --button-primary: #edebeb;
+  --button-secondary: #dddbdb;
+  --button-contrast: #121212;
+
+  /* Border */
+  --border-muted: #edebeb;
+  --border-secondary: #dddbdb;
+  --border-contrast: #121212;
+
+  /* Utility */
+  --utility-active-selected: #f6efee;
+  --utility-sucess: #57a16c;
+  --utility-info: #3d79c2;
+  --utility-alert: #ca3e35;
+  --utility-caution: #f19c33;
+}
