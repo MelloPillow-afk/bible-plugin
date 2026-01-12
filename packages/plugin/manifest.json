@@ -8,6 +8,8 @@
   "editorType": ["figma"],
   "ui": {},
   "networkAccess": {
-    "allowedDomains": ["*"]
+    "allowedDomains": ["https://figma.com"],
+    "reasoning": "This plugin needs to access the Figma API to insert passages into the document.",
+    "devAllowedDomains": ["figma.com", "http://localhost:5173"]
   }
 }

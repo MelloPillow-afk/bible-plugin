@@ -1,64 +1,39 @@
 // Main thread code - runs in Figma's sandbox
 // Has access to Figma API, no browser APIs
 
-import { initBridge, onMessage, emit } from './bridge'
-import type { InsertPassageMessage, InsertPassageResult, GetSelectionResult } from '@shared/types'
-
-// Initialize the bridge
-initBridge()
+import type { PluginMessage, InsertPassageMessage } from '@shared/types'
 
 // Show UI
-figma.showUI(__html__, { width: 400, height: 600 })
+figma.showUI(`<script>window.location.href = "http://localhost:5173"</script>`, 
+  { width: 400, height: 300, themeColors: true })
 
-// Register message handlers
-onMessage('INSERT_PASSAGE', async (msg: InsertPassageMessage, respond) => {
-  const { content } = msg.payload
 
-  await figma.loadFontAsync({ family: 'Inter', style: 'Regular' })
+// Handle messages from the web app
+figma.ui.onmessage = async (msg: PluginMessage) => {
+  switch (msg.type) {
+    case 'INSERT_PASSAGE': {
+      const { content } = (msg as InsertPassageMessage).payload
 
-  const textNode = figma.createText()
-  textNode.characters = content
-  textNode.x = figma.viewport.center.x - textNode.width / 2
-  textNode.y = figma.viewport.center.y - textNode.height / 2
+      await figma.loadFontAsync({ family: "Inter", style: "Regular" })
+      // Create text node
+      const textNode = figma.createText()
+      textNode.characters = content
 
-  figma.currentPage.appendChild(textNode)
-  figma.currentPage.selection = [textNode]
+      // Position at viewport center
+      textNode.x = figma.viewport.center.x - textNode.width / 2
+      textNode.y = figma.viewport.center.y - textNode.height / 2
 
-  respond({
-    nodeId: textNode.id,
-    success: true,
-  } satisfies InsertPassageResult)
-})
+      // Add to page and select
+      figma.currentPage.appendChild(textNode)
+      figma.currentPage.selection = [textNode]
 
-onMessage('GET_SELECTION', (_msg, respond) => {
-  const selection = figma.currentPage.selection
-  respond({
-    hasSelection: selection.length > 0,
-    selectedNodeIds: selection.map((n) => n.id),
-    selectedNodeTypes: selection.map((n) => n.type),
-  } satisfies GetSelectionResult)
-})
+      // Zoom to fit
+      figma.viewport.scrollAndZoomIntoView([textNode])
+      break
+    }
 
-onMessage('READY', () => {
-  console.log('Web app is ready')
-  emit({
-    type: 'PLUGIN_READY',
-    payload: { version: '1.0.0' },
-  })
-})
-
-onMessage('CLOSE', () => {
-  figma.closePlugin()
-})
-
-// Listen for selection changes and notify the web app
-figma.on('selectionchange', () => {
-  const selection = figma.currentPage.selection
-  emit({
-    type: 'SELECTION_CHANGED',
-    payload: {
-      selectedNodeIds: selection.map((n) => n.id),
-      selectedNodeTypes: selection.map((n) => n.type),
-    },
-  })
-})
+    case 'CLOSE':
+      figma.closePlugin()
+      break
+  }
+}
