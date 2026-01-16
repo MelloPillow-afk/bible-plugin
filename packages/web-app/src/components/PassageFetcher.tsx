@@ -1,6 +1,7 @@
 import { BibleTextView } from '@youversion/platform-react-ui'
 import { usePassage } from '@youversion/platform-react-hooks'
 import { postToPlugin } from '../lib/postToPlugin'
+import { parseHTML } from '../lib/html-parser'
 
 // const BIBLE_VERSION_ID = 111;
 export function PassageFetcher() {
@@ -20,10 +21,13 @@ export function PassageFetcher() {
       return
     }
 
+    // Parse HTML in browser before sending to plugin
+    const parsedContent = parseHTML(passage.content || '')
+
     postToPlugin({
       type: 'INSERT_PASSAGE',
       payload: {
-        content: passage.content || '',
+        parsedContent,
         reference: 'JHN.3.5-16',
         versionId: 111
       }
