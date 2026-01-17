@@ -56,9 +56,14 @@ export class NodeBuilder {
 
     // Set up auto-layout
     frame.layoutMode = 'VERTICAL'
-    frame.primaryAxisSizingMode = 'AUTO'
-    frame.counterAxisSizingMode = 'FIXED'
-    frame.resize(FRAME_WIDTH, 1) // Height will auto-adjust
+
+    // Use layoutSizing properties for proper auto-sizing
+    // HUG means the frame will expand to fit its children
+    frame.layoutSizingVertical = 'HUG'
+    frame.layoutSizingHorizontal = 'FIXED'
+
+    // Set width only - height will be determined by HUG
+    frame.resize(FRAME_WIDTH, frame.height)
 
     // Remove default fills (transparent background)
     frame.fills = []
@@ -133,13 +138,17 @@ export class NodeBuilder {
     // Create text node
     const textNode = figma.createText()
 
+    // Configure text node sizing FIRST (before setting content)
+    // This ensures the auto-resize is active when content is added
+    textNode.textAutoResize = 'WIDTH_AND_HEIGHT'
+
     // Set the full text content
     const fullText = nonEmptySegments.map(s => s.content).join('')
     textNode.characters = fullText
 
-    // Configure text node sizing
-    textNode.resize(FRAME_WIDTH, textNode.height)
+    // Now set fixed width and let height adjust
     textNode.textAutoResize = 'HEIGHT'
+    textNode.resize(FRAME_WIDTH, textNode.height)
 
     // Apply paragraph indent if specified
     if (parentStyle.paragraphIndent) {

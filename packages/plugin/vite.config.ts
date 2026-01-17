@@ -13,7 +13,6 @@ export default defineConfig({
     rollupOptions: {
       input: {
         code: 'src/code.ts',
-        // target: "ES2017",
       },
       output: {
         entryFileNames: '[name].js'

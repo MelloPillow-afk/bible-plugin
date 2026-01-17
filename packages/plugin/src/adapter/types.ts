@@ -71,6 +71,7 @@ export interface TextStyleProps {
   lineHeight?: LineHeight
   letterSpacing?: LetterSpacing
   textDecoration?: 'NONE' | 'UNDERLINE' | 'STRIKETHROUGH'
+  color?: RGB
 }
 
 /**

@@ -8,6 +8,7 @@
 
 import type { USFMStyleRule, ContextualStyleRule } from '../adapter/types'
 import { emToPx, createLineHeight, calcEmToPx } from '../utils/css-helpers'
+import { COLORS } from './colors'
 
 /**
  * Set of USFM class names that represent block-level elements
@@ -367,13 +368,12 @@ export const USFM_STYLES: Record<string, USFMStyleRule> = {
   /**
    * Words of Jesus (wj)
    * CSS: color: var(--yv-red);
-   * Note: Color is handled separately in Figma via fills
    */
   wj: {
     isBlock: false,
     description: 'Words of Jesus (red letter)',
     textStyle: {
-      // Color handled separately via text fills
+      color: COLORS.RED,
     },
   },
 
