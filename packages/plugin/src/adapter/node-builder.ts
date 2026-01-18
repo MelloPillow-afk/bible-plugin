@@ -188,22 +188,26 @@ export class NodeBuilder {
 
   /**
    * Recursively collect text segments from ParsedNodes
+   * @param inheritedClasses - Classes inherited from parent nodes (for verse label detection)
    */
   private collectTextSegments(
     nodes: ParsedNode[],
     inheritedStyle: FigmaStyle,
-    segments: TextSegment[]
+    segments: TextSegment[],
+    inheritedClasses: string[] = []
   ): void {
     for (const node of nodes) {
       // Merge inherited style with node's own style
       const mergedStyle: FigmaStyle = { ...inheritedStyle, ...node.style }
+      // Merge inherited classes with node's own classes
+      const mergedClasses = [...inheritedClasses, ...node.classes]
 
       if (node.type === 'text' || (node.children.length === 0 && node.textContent)) {
         // This is a leaf text node
         let content = node.textContent
 
-        // Check if this is a verse label that needs superscript conversion
-        const isVerseLabel = node.classes.includes('label') || node.classes.includes('yv-vlbl')
+        // Check merged classes for verse label (classes may be on parent span)
+        const isVerseLabel = mergedClasses.includes('label') || mergedClasses.includes('yv-vlbl')
         if (isVerseLabel) {
           content = toSuperscript(content)
         }
@@ -212,8 +216,8 @@ export class NodeBuilder {
           segments.push(this.createTextSegment(content, mergedStyle))
         }
       } else {
-        // Process children recursively
-        this.collectTextSegments(node.children, mergedStyle, segments)
+        // Process children recursively, passing merged classes
+        this.collectTextSegments(node.children, mergedStyle, segments, mergedClasses)
       }
     }
   }

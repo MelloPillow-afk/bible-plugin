@@ -22,9 +22,6 @@ figma.ui.onmessage = async (msg: PluginMessage) => {
         break
       }
 
-      await figma.loadFontAsync({ family: 'Inter', style: 'Regular' })
-      await figma.loadFontAsync({ family: 'Untitled Serif', style: 'Regular' })
-
       try {
         // Convert parsed content to Figma nodes using the adapter
 

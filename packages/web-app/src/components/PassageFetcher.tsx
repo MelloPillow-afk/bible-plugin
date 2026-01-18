@@ -6,7 +6,7 @@ import { parseHTML } from '../lib/html-parser'
 // const BIBLE_VERSION_ID = 111;
 export function PassageFetcher() {
   // const version = useVersion(BIBLE_VERSION_ID);
-  const { passage, loading, error } = usePassage({ versionId: 111, usfm: 'JHN.3.5-16', format: 'html', include_headings: true, include_notes: false })
+  const { passage, loading, error } = usePassage({ versionId: 111, usfm: 'JHN.14.5-7', format: 'html', include_headings: true, include_notes: false })
 
   if (loading) {
     return <div>Loading...</div>
@@ -28,7 +28,7 @@ export function PassageFetcher() {
       type: 'INSERT_PASSAGE',
       payload: {
         parsedContent,
-        reference: 'JHN.3.5-16',
+        reference: 'JHN.14.5-7',
         versionId: 111
       }
     })
@@ -42,7 +42,7 @@ export function PassageFetcher() {
         Insert Passage
       </button>
       <BibleTextView
-        reference="JHN.3.5-16"
+        reference="JHN.14.5-7"
         versionId={111}
         fontFamily="serif"
         fontSize={20}

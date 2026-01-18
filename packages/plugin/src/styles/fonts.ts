@@ -1,4 +1,5 @@
 export const FONTS = {
+  INTER: { family: 'Inter', style: 'Regular' },
   SERIF: { family: 'Georgia', style: 'Regular' },
   SERIF_BOLD: { family: 'Georgia', style: 'Bold' },
   SERIF_ITALIC: { family: 'Georgia', style: 'Italic' }
@@ -7,6 +8,7 @@ export const FONTS = {
 export async function loadRequiredFonts(): Promise<void> {
   try {
     await Promise.all([
+      figma.loadFontAsync(FONTS.INTER),
       figma.loadFontAsync(FONTS.SERIF),
       figma.loadFontAsync(FONTS.SERIF_BOLD),
       figma.loadFontAsync(FONTS.SERIF_ITALIC)
