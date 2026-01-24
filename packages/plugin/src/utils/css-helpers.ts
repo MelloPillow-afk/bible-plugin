@@ -79,16 +79,16 @@ export function clampPositive(value: number): number {
  * Maps regular digits to their Unicode superscript equivalents
  */
 const SUPERSCRIPT_MAP: Record<string, string> = {
-  '0': '\u2070 ',
-  '1': '\u00B9 ',
-  '2': '\u00B2 ',
-  '3': '\u00B3 ',
-  '4': '\u2074 ',
-  '5': '\u2075 ',
-  '6': '\u2076 ',
-  '7': '\u2077 ',
-  '8': '\u2078 ',
-  '9': '\u2079 ',
+  '0': '\u2070',
+  '1': '\u00B9',
+  '2': '\u00B2',
+  '3': '\u00B3',
+  '4': '\u2074',
+  '5': '\u2075',
+  '6': '\u2076',
+  '7': '\u2077',
+  '8': '\u2078',
+  '9': '\u2079',
 }
 
 /**
@@ -98,8 +98,10 @@ const SUPERSCRIPT_MAP: Record<string, string> = {
  * @returns The text with digits converted to superscript Unicode characters
  */
 export function toSuperscript(text: string): string {
-  return text
+  let superscriptText = text
     .split('')
     .map(char => SUPERSCRIPT_MAP[char] || char)
     .join('')
+
+    return `${superscriptText} `
 }
