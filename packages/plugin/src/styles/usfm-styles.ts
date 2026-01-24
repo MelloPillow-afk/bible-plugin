@@ -157,8 +157,8 @@ export const USFM_STYLES: Record<string, USFMStyleRule> = {
       lineHeight: createLineHeight(1.625),
     },
     paragraphStyle: {
-      paddingLeft: emToPx(2),
-      paragraphIndent: 0, // CSS has -2em, Figma doesn't support negative
+      paddingLeft: emToPx(0),
+      paragraphIndent: 0,
       marginBottom: calcEmToPx(0.3),
     },
   },
@@ -173,8 +173,8 @@ export const USFM_STYLES: Record<string, USFMStyleRule> = {
       lineHeight: createLineHeight(1.625),
     },
     paragraphStyle: {
-      paddingLeft: emToPx(2),
-      paragraphIndent: 0, // CSS has -2em, Figma doesn't support negative
+      paddingLeft: emToPx(0),
+      paragraphIndent: 0,
       marginBottom: calcEmToPx(0.3),
     },
   },
@@ -191,8 +191,8 @@ export const USFM_STYLES: Record<string, USFMStyleRule> = {
       lineHeight: createLineHeight(1.625),
     },
     paragraphStyle: {
-      paddingLeft: emToPx(2),
-      paragraphIndent: 0, // CSS has -1em, Figma doesn't support negative
+      paddingLeft: emToPx(1),
+      paragraphIndent: 0,
       marginBottom: calcEmToPx(0.3),
     },
   },
@@ -209,8 +209,8 @@ export const USFM_STYLES: Record<string, USFMStyleRule> = {
       lineHeight: createLineHeight(1.625),
     },
     paragraphStyle: {
-      paddingLeft: emToPx(3),
-      paragraphIndent: 0, // CSS has -2em, Figma doesn't support negative
+      paddingLeft: emToPx(1),
+      paragraphIndent: 0,
       marginBottom: calcEmToPx(0.3),
     },
   },
@@ -227,8 +227,8 @@ export const USFM_STYLES: Record<string, USFMStyleRule> = {
       lineHeight: createLineHeight(1.625),
     },
     paragraphStyle: {
-      paddingLeft: emToPx(4),
-      paragraphIndent: 0, // CSS has -2em, Figma doesn't support negative
+      paddingLeft: emToPx(2),
+      paragraphIndent: 0,
       marginBottom: calcEmToPx(0.3),
     },
   },

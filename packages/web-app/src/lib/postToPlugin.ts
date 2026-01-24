@@ -14,10 +14,3 @@ export function postToPlugin(message: PluginMessage): void {
   // Send directly to plugin (Figma wraps in pluginMessage automatically)
   parent.postMessage({ pluginMessage: message, pluginId: 'bible-plugin' }, '*')
 }
-
-/**
- * Check if running inside Figma plugin iframe
- */
-export function isInFigma(): boolean {
-  return typeof parent !== 'undefined' && parent !== window
-}
