@@ -4,44 +4,14 @@
  * Defines styling rules for USFM (Unified Standard Format Markers) classes
  * based on the bible-reader.css stylesheet. These styles are used to convert
  * biblical text formatting to Figma text node properties.
+ *
+ * Block classification is determined by the `isBlock` property on each rule.
+ * This is the single source of truth for block/inline classification.
  */
 
 import type { USFMStyleRule, ContextualStyleRule } from '../adapter/types'
 import { emToPx, createLineHeight, calcEmToPx } from '../utils/css-helpers'
 import { COLORS } from './colors'
-
-/**
- * Set of USFM class names that represent block-level elements
- * Used by the parser to determine element type
- */
-export const BLOCK_CLASSES = new Set([
-  // Major titles
-  'mt', 'mt1', 'mt2',
-  'imt', 'imt1', 'imt2', 'imt3', 'imt4',
-  'iot',
-  // Section headers
-  'ms', 'ms1', 'ms2',
-  's', 's1', 's2', 's3', 's4',
-  'is', 'is1', 'is2',
-  'r', 'sp', 'sr', 'qa', 'd',
-  // Paragraphs
-  'p', 'm', 'nb',
-  'ip', 'ipi',
-  'pi', 'pi1', 'pi2', 'pi3',
-  'mi', 'pm', 'pmo', 'pmc', 'pmr',
-  'pr', 'pc',
-  // Poetry/Quotes
-  'q', 'q1', 'q2', 'q3', 'q4',
-  'qr', 'qc', 'qs',
-  'iq', 'iq1', 'iq2', 'iq3', 'iq4',
-  'qm', 'qm1', 'qm2', 'qm3', 'qm4',
-  // Lists
-  'li', 'li1', 'li2', 'li3', 'li4',
-  'io', 'io1', 'io2', 'io3',
-  // Other
-  'b',
-  'chapter', 'version'
-])
 
 /**
  * USFM Style definitions for common Bible text classes

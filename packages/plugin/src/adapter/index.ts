@@ -1,8 +1,19 @@
-import type { ParsedNode as SharedParsedNode } from '@shared/types'
+import type { DOMNode } from '@shared/types'
 import type { ParsedNode } from './types'
 import { LayoutEngine } from './layout-engine'
 import { NodeBuilder } from './node-builder'
 import { loadRequiredFonts } from '../styles/fonts'
+import { USFM_STYLES } from '../styles/usfm-styles'
+
+/**
+ * Block-level HTML tags (fallback when no USFM class matches)
+ */
+const BLOCK_TAGS = new Set([
+  'div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+  'section', 'article', 'header', 'footer', 'main',
+  'nav', 'aside', 'blockquote', 'pre',
+  'ul', 'ol', 'li', 'table', 'tr', 'td', 'th'
+])
 
 /**
  * DOMToFigmaAdapter
@@ -10,7 +21,7 @@ import { loadRequiredFonts } from '../styles/fonts'
  *
  * Pipeline:
  * 1. Load required fonts
- * 2. Add previousSibling references for contextual styling
+ * 2. Classify nodes and add sibling references
  * 3. Apply layout styles based on USFM classes
  * 4. Build Figma nodes from the styled tree
  */
@@ -24,19 +35,19 @@ export class DOMToFigmaAdapter {
   }
 
   /**
-   * Convert parsed content to Figma nodes
-   * @param parsedTree - Pre-parsed node tree from web app
+   * Convert DOM tree to Figma nodes
+   * @param domTree - Raw DOM node tree from web app
    * @returns Array of created SceneNodes
    */
-  async convert(parsedTree: SharedParsedNode): Promise<SceneNode[]> {
+  async convert(domTree: DOMNode): Promise<SceneNode[]> {
     // Step 1: Load required fonts
     await loadRequiredFonts()
 
-    // Step 2: Add previousSibling references for contextual styling
-    const treeWithSiblings = this.addSiblingReferences(parsedTree)
+    // Step 2: Classify nodes and add sibling references
+    const classified = this.classifyTree(domTree)
 
     // Step 3: Apply layout styles
-    const styledTree = this.layoutEngine.applyStyles(treeWithSiblings)
+    const styledTree = this.layoutEngine.applyStyles(classified)
 
     // Step 4: Build Figma nodes
     const figmaNodes = this.nodeBuilder.build(styledTree)
@@ -45,27 +56,55 @@ export class DOMToFigmaAdapter {
   }
 
   /**
-   * Add previousSibling references to the tree for contextual styling
-   * The web app sends nodes without this to avoid circular refs in JSON
+   * Classify DOM nodes into block/inline/text and add sibling references
+   * Uses USFM_STYLES as the single source of truth for block classification
    */
-  private addSiblingReferences(node: SharedParsedNode, previousSibling?: ParsedNode): ParsedNode {
+  private classifyTree(node: DOMNode, previousSibling?: ParsedNode): ParsedNode {
+    const type = this.classifyNode(node)
+
     const result: ParsedNode = {
-      type: node.type,
       tagName: node.tagName,
       classes: node.classes,
       textContent: node.textContent,
+      type,
       children: [],
       previousSibling
     }
 
     let prevChild: ParsedNode | undefined
     for (const child of node.children) {
-      const processedChild = this.addSiblingReferences(child, prevChild)
-      result.children.push(processedChild)
-      prevChild = processedChild
+      const classified = this.classifyTree(child, prevChild)
+      result.children.push(classified)
+      prevChild = classified
     }
 
     return result
+  }
+
+  /**
+   * Classify a node as block, inline, or text
+   * Uses USFM_STYLES.isBlock as the single source of truth
+   */
+  private classifyNode(node: DOMNode): 'block' | 'inline' | 'text' {
+    // Text nodes
+    if (node.tagName === null) {
+      return 'text'
+    }
+
+    // Check USFM classes (single source of truth)
+    for (const cls of node.classes) {
+      const rule = USFM_STYLES[cls]
+      if (rule?.isBlock) {
+        return 'block'
+      }
+    }
+
+    // HTML block tags (fallback)
+    if (BLOCK_TAGS.has(node.tagName)) {
+      return 'block'
+    }
+
+    return 'inline'
   }
 }
 

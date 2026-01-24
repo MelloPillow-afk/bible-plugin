@@ -5,15 +5,17 @@
 // ============================================
 
 /**
- * Parsed node from HTML parsing
- * Used to transfer parsed content from web app to plugin
+ * Raw DOM node structure from HTML parsing
+ * Used to transfer DOM tree from web app to plugin
+ *
+ * The web-app extracts raw DOM structure without classification.
+ * The plugin handles USFM semantics (block/inline classification).
  */
-export interface ParsedNode {
-  type: 'block' | 'inline' | 'text'
+export interface DOMNode {
   tagName: string | null
   classes: string[]
   textContent: string
-  children: ParsedNode[]
+  children: DOMNode[]
 }
 
 // ============================================
@@ -23,7 +25,7 @@ export interface ParsedNode {
 export interface InsertPassageMessage {
   type: 'INSERT_PASSAGE'
   payload: {
-    parsedContent: ParsedNode
+    content: DOMNode
     reference: string
     versionId: number
   }

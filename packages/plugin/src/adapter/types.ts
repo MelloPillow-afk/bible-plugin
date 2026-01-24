@@ -2,6 +2,8 @@
  * Types for the USFM to Figma adapter
  */
 
+import type { DOMNode } from '@shared/types'
+
 /**
  * RGB color type for Figma fills
  */
@@ -12,13 +14,11 @@ export interface RGB {
 }
 
 /**
- * Parsed node from HTML parsing
+ * Internal parsed node with classification and styling (plugin-only)
+ * Extends DOMNode with type classification and plugin-specific fields
  */
-export interface ParsedNode {
+export interface ParsedNode extends DOMNode {
   type: 'block' | 'inline' | 'text'
-  tagName: string | null
-  classes: string[]
-  textContent: string
   children: ParsedNode[]
   previousSibling?: ParsedNode
   style?: FigmaStyle

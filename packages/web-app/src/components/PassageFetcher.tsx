@@ -1,12 +1,12 @@
 import { BibleTextView } from '@youversion/platform-react-ui'
 import { usePassage } from '@youversion/platform-react-hooks'
 import { postToPlugin } from '../lib/postToPlugin'
-import { parseHTML } from '../lib/html-parser'
+import { htmlToTree } from '../lib/html-parser'
 
 // const BIBLE_VERSION_ID = 111;
 export function PassageFetcher() {
   // const version = useVersion(BIBLE_VERSION_ID);
-  const { passage, loading, error } = usePassage({ versionId: 111, usfm: 'JHN.14.5-7', format: 'html', include_headings: true, include_notes: false })
+  const { passage, loading, error } = usePassage({ versionId: 111, usfm: 'SNG.6.1-10', format: 'html', include_headings: true, include_notes: false })
 
   if (loading) {
     return <div>Loading...</div>
@@ -21,13 +21,13 @@ export function PassageFetcher() {
       return
     }
 
-    // Parse HTML in browser before sending to plugin
-    const parsedContent = parseHTML(passage.content || '')
+    // Convert HTML to DOM tree before sending to plugin
+    const content = htmlToTree(passage.content || '')
 
     postToPlugin({
       type: 'INSERT_PASSAGE',
       payload: {
-        parsedContent,
+        content,
         reference: 'JHN.14.5-7',
         versionId: 111
       }
@@ -42,7 +42,7 @@ export function PassageFetcher() {
         Insert Passage
       </button>
       <BibleTextView
-        reference="JHN.14.5-7"
+        reference="SNG.6.1-10"
         versionId={111}
         fontFamily="serif"
         fontSize={20}

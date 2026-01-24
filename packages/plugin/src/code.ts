@@ -12,7 +12,7 @@ figma.showUI(`<script>window.location.href = "http://localhost:5173"</script>`,
 figma.ui.onmessage = async (msg: PluginMessage) => {
   switch (msg.type) {
     case 'INSERT_PASSAGE': {
-      const { parsedContent } = (msg).payload
+      const { content } = msg.payload
 
       // Get the selected frame
       const selectedNode = figma.currentPage.selection[0]
@@ -26,7 +26,7 @@ figma.ui.onmessage = async (msg: PluginMessage) => {
         // Convert parsed content to Figma nodes using the adapter
 
       const adapter = new DOMToFigmaAdapter()
-        const nodes = await adapter.convert(parsedContent)
+        const nodes = await adapter.convert(content)
 
         // Add all created nodes to the selected frame
         for (const node of nodes) {
