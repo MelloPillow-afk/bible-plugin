@@ -13,6 +13,7 @@ const FRAME_WIDTH = 512
  * - Inline/text elements become TextNodes with character-level styling
  */
 export class NodeBuilder {
+
   /**
    * Build Figma nodes from the ParsedNode tree
    * Returns an array of created SceneNodes
@@ -52,6 +53,7 @@ export class NodeBuilder {
    */
   private buildBlockNode(node: ParsedNode): FrameNode {
     const frame = figma.createFrame()
+    frame.name = node.description || 'Frame'
     const style = node.style || {}
 
     // Set up auto-layout

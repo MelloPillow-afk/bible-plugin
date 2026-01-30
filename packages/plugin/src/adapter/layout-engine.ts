@@ -21,12 +21,25 @@ export class LayoutEngine {
     // Compute style for this node
     const style = this.computeStyle(node)
 
+    // Look up USFM description for block nodes
+    let description = node.description
+    if (node.type === 'block' && !description) {
+      for (const cls of node.classes) {
+        const rule = USFM_STYLES[cls]
+        if (rule?.description) {
+          description = rule.description
+          break
+        }
+      }
+    }
+
     // Process children recursively
     const processedChildren = node.children.map((child: ParsedNode) => this.processNode(child))
 
     return {
       ...node,
       style,
+      description,
       children: processedChildren
     }
   }

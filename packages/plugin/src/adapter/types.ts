@@ -22,6 +22,7 @@ export interface ParsedNode extends DOMNode {
   children: ParsedNode[]
   previousSibling?: ParsedNode
   style?: FigmaStyle
+  description?: string
 }
 
 /**

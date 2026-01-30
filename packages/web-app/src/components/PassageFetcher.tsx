@@ -6,7 +6,7 @@ import { htmlToTree } from '../lib/html-parser'
 // const BIBLE_VERSION_ID = 111;
 export function PassageFetcher() {
   // const version = useVersion(BIBLE_VERSION_ID);
-  const { passage, loading, error } = usePassage({ versionId: 111, usfm: 'SNG.6.1-10', format: 'html', include_headings: true, include_notes: false })
+  const { passage, loading, error } = usePassage({ versionId: 111, usfm: 'JHN.14.5-7', format: 'html', include_headings: true, include_notes: false })
 
   if (loading) {
     return <div>Loading...</div>
