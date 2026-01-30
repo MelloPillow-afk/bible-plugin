@@ -1,7 +1,7 @@
 import { BibleTextView } from '@youversion/platform-react-ui'
 import { usePassage } from '@youversion/platform-react-hooks'
-import { postToPlugin } from '../lib/postToPlugin'
-import { htmlToTree } from '../lib/html-parser'
+import { postToPlugin } from '@/lib/postToPlugin'
+import { htmlToTree } from '@/lib/html-parser'
 
 // const BIBLE_VERSION_ID = 111;
 export function PassageFetcher() {
@@ -49,7 +49,7 @@ export function PassageFetcher() {
         lineHeight={1.5}
         renderNotes={false}
       />
-      
+
     </div>
   )
 }
