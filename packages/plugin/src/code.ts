@@ -6,7 +6,7 @@ import { DOMToFigmaAdapter } from './adapter'
 
 // Show UI
 figma.showUI(`<script>window.location.href = "http://localhost:5173"</script>`,
-  { width: 400, height: 300, themeColors: true })
+  { width: 600, height: 600, themeColors: true })
 
 // Handle messages from the web app
 figma.ui.onmessage = async (msg: PluginMessage) => {
