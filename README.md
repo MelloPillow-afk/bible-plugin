@@ -59,7 +59,21 @@ cd path/to/bible-plugin
 
 Replace `path/to/bible-plugin` with the actual path to the folder. You can also type `cd ` (with a space) and then drag the folder into Terminal to paste the path.
 
-### 3. Install dependencies
+### 3. From here, you have two options:
+1. Run the `./run.sh` script to set your YouVersion API key and start the development environment
+2. Create your `.envrc` from the template and add your YouVersion API key
+
+#### Option 1: Run the `./run.sh` script
+
+```bash
+./run.sh
+```
+
+This will set your YouVersion API key, install dependencies, and start the development environment.
+
+#### Option 2: Manually set your YouVersion API key and install dependencies
+
+##### Install dependencies
 
 ```
 pnpm install
@@ -67,12 +81,32 @@ pnpm install
 
 This downloads everything the project needs. You only need to do this once (or again if dependencies change).
 
+##### Create your `.envrc` from the template and add your YouVersion API key
+
+Copy the template:
+
+```bash
+cp .envrc.example .envrc
+```
+
+Open `.envrc` and set your API key:
+
+```bash
+export VITE_YOUVERSION_APP_KEY=your_youversion_api_key_here
+```
+
+If you use `direnv`, allow it after saving:
+
+```bash
+direnv allow
+```
+
 ## Running the Plugin Locally
 
-Start both the web app and plugin builder with a single command:
+After prerequisites are installed and `.envrc` is set, start both the web app and plugin builder with:
 
-```
-pnpm run dev
+```bash
+./run.sh
 ```
 
 This does two things:
@@ -80,6 +114,7 @@ This does two things:
 - Watches the plugin code for changes and rebuilds automatically
 
 Leave this running in the background while you use the plugin in Figma. To stop it, press `Ctrl + C` in Terminal.
+
 
 ## Adding the Plugin to Figma
 
@@ -93,7 +128,7 @@ You only need to do this once:
 
 ## Using the Plugin
 
-1. Make sure `pnpm run dev` is running in Terminal
+1. Make sure `./run.sh` is running in Terminal
 2. In Figma, select a **Frame** on your canvas (the plugin inserts content into the selected frame)
 3. Go to **Plugins** > **Development** > **Bible Plugin**
 4. Search for and select a passage
