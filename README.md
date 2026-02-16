@@ -1,73 +1,100 @@
-# React + TypeScript + Vite
+# Bible Plugin for Figma
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Figma plugin that lets designers insert formatted biblical text directly into their designs. Search for a passage, and it gets inserted into your selected frame with proper formatting (bold, italic, verse numbers).
 
-Currently, two official plugins are available:
+## Prerequisites
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+You'll need to install these before getting started: 
 
-## React Compiler
+### 1. Node.js (v18 or higher)
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+Node.js is the runtime that builds and runs the project code.
 
-## Expanding the ESLint configuration
+- Go to [https://nodejs.org](https://nodejs.org) and download the **LTS** version
+- Run the installer and follow the prompts
+- To verify it installed, open Terminal and type: `node --version`
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 2. pnpm
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+pnpm is the package manager this project uses to install dependencies.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Once Node.js is installed, open Terminal and run:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+npm install -g pnpm
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 3. Figma Desktop App
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+The plugin needs the **Figma desktop app** (not the browser version) to load locally.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Download it from [https://www.figma.com/downloads](https://www.figma.com/downloads) if you don't already have it
+
+## Opening Terminal
+
+If you're not familiar with Terminal:
+
+- **macOS:** Press `Cmd + Space` to open Spotlight, type **Terminal**, and press Enter
+- **Windows:** Press `Win + R`, type **cmd**, and press Enter
+
+All the commands below are typed into Terminal.
+
+## Setup
+
+### 1. Download the project
+
+If you received the project as a zip file, unzip it and note where the folder is.
+
+If you're cloning from GitHub:
+
 ```
+git clone <repo-url>
+```
+
+### 2. Navigate into the project folder
+
+```
+cd path/to/bible-plugin
+```
+
+Replace `path/to/bible-plugin` with the actual path to the folder. You can also type `cd ` (with a space) and then drag the folder into Terminal to paste the path.
+
+### 3. Install dependencies
+
+```
+pnpm install
+```
+
+This downloads everything the project needs. You only need to do this once (or again if dependencies change).
+
+## Running the Plugin Locally
+
+Start both the web app and plugin builder with a single command:
+
+```
+pnpm run dev
+```
+
+This does two things:
+- Starts the web app at `http://localhost:5173`
+- Watches the plugin code for changes and rebuilds automatically
+
+Leave this running in the background while you use the plugin in Figma. To stop it, press `Ctrl + C` in Terminal.
+
+## Adding the Plugin to Figma
+
+You only need to do this once:
+
+1. Open the **Figma desktop app**
+2. Open any file (or create a new one)
+3. Go to the menu: **Plugins** > **Development** > **Import plugin from manifest...**
+4. Navigate to the project folder, then into `packages/plugin/` and select **manifest.json**
+5. The plugin is now available under **Plugins** > **Development** > **Bible Plugin**
+
+## Using the Plugin
+
+1. Make sure `pnpm run dev` is running in Terminal
+2. In Figma, select a **Frame** on your canvas (the plugin inserts content into the selected frame)
+3. Go to **Plugins** > **Development** > **Bible Plugin**
+4. Search for and select a passage
+5. The formatted text gets inserted into your frame

@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "dev": "pnpm run dev:web & pnpm run dev:plugin",
     "dev:web": "pnpm --filter web-app dev",
     "dev:plugin": "pnpm --filter plugin dev",
     "build:web": "pnpm --filter web-app build",
