@@ -7,27 +7,30 @@ import { htmlToTree } from '@/lib/html-parser'
 export function PassageFetcher() {
   const [versionIdInput, setVersionIdInput] = useState('111')
   const [usfmInput, setUsfmInput] = useState('JHN.14.5-7')
-  const [submitted, setSubmitted] = useState(false)
+  const [submittedValues, setSubmittedValues] = useState<{
+    versionId: number
+    usfm: string
+  } | null>(null)
 
   const versionId = Number(versionIdInput)
 
   const { passage, loading, error } = usePassage({
-    versionId,
-    usfm: usfmInput,
+    versionId: submittedValues?.versionId ?? 0,
+    usfm: submittedValues?.usfm ?? '',
     format: 'html',
     include_headings: true,
     include_notes: false,
-    options: { enabled: submitted },
+    options: { enabled: !!submittedValues },
   })
 
   const handleSubmit = () => {
     if (versionIdInput && usfmInput) {
-      setSubmitted(true)
+      setSubmittedValues({ versionId: Number(versionIdInput), usfm: usfmInput })
     }
   }
 
   const handleBack = () => {
-    setSubmitted(false)
+    setSubmittedValues(null)
   }
 
   const handleInsertPassage = () => {
@@ -42,13 +45,13 @@ export function PassageFetcher() {
       type: 'INSERT_PASSAGE',
       payload: {
         content,
-        reference: usfmInput || '',
+        reference: passage.id.toString() || '',
         versionId,
       },
     })
   }
 
-  if (!submitted) {
+  if (!submittedValues) {
     return (
       <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
         <h1>Bible Plugin</h1>
