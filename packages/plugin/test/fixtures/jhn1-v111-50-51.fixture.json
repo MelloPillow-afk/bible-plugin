@@ -1,0 +1,174 @@
+{
+  "source": {
+    "endpoint": "/v1/bibles/111/passages/JHN.1?format=html&include_headings=true&include_notes=false",
+    "reference": "John 1",
+    "capturedAt": "2026-02-19T21:32:14.755Z"
+  },
+  "versionId": 111,
+  "usfm": "JHN.1",
+  "notes": "Focused verse 50-51 paragraph. Converted with current htmlToTree logic that drops whitespace-only text nodes between inline spans, reproducing merged-word plugin output.",
+  "domTree": {
+    "tagName": "div",
+    "classes": [],
+    "textContent": "",
+    "children": [
+      {
+        "tagName": "div",
+        "classes": [
+          "p"
+        ],
+        "textContent": "",
+        "children": [
+          {
+            "tagName": "span",
+            "classes": [
+              "yv-v"
+            ],
+            "textContent": "",
+            "children": []
+          },
+          {
+            "tagName": "span",
+            "classes": [
+              "yv-vlbl"
+            ],
+            "textContent": "",
+            "children": [
+              {
+                "tagName": null,
+                "classes": [],
+                "textContent": "50",
+                "children": []
+              }
+            ]
+          },
+          {
+            "tagName": null,
+            "classes": [],
+            "textContent": "Jesus said, ",
+            "children": []
+          },
+          {
+            "tagName": "span",
+            "classes": [
+              "wj"
+            ],
+            "textContent": "",
+            "children": [
+              {
+                "tagName": null,
+                "classes": [],
+                "textContent": "“You believe",
+                "children": []
+              }
+            ]
+          },
+          {
+            "tagName": "span",
+            "classes": [
+              "wj"
+            ],
+            "textContent": "",
+            "children": [
+              {
+                "tagName": null,
+                "classes": [],
+                "textContent": "because I told you I saw you under the fig tree. You will see greater things than that.”",
+                "children": []
+              }
+            ]
+          },
+          {
+            "tagName": "span",
+            "classes": [
+              "yv-v"
+            ],
+            "textContent": "",
+            "children": []
+          },
+          {
+            "tagName": "span",
+            "classes": [
+              "yv-vlbl"
+            ],
+            "textContent": "",
+            "children": [
+              {
+                "tagName": null,
+                "classes": [],
+                "textContent": "51",
+                "children": []
+              }
+            ]
+          },
+          {
+            "tagName": null,
+            "classes": [],
+            "textContent": "He then added, ",
+            "children": []
+          },
+          {
+            "tagName": "span",
+            "classes": [
+              "wj"
+            ],
+            "textContent": "",
+            "children": [
+              {
+                "tagName": null,
+                "classes": [],
+                "textContent": "“Very truly I tell you,",
+                "children": []
+              }
+            ]
+          },
+          {
+            "tagName": "span",
+            "classes": [
+              "wj"
+            ],
+            "textContent": "",
+            "children": [
+              {
+                "tagName": null,
+                "classes": [],
+                "textContent": "you",
+                "children": []
+              }
+            ]
+          },
+          {
+            "tagName": "span",
+            "classes": [
+              "wj"
+            ],
+            "textContent": "",
+            "children": [
+              {
+                "tagName": null,
+                "classes": [],
+                "textContent": "will see ‘heaven open, and the angels of God ascending and descending on’",
+                "children": []
+              }
+            ]
+          },
+          {
+            "tagName": "span",
+            "classes": [
+              "wj"
+            ],
+            "textContent": "",
+            "children": [
+              {
+                "tagName": null,
+                "classes": [],
+                "textContent": "the Son of Man.”",
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

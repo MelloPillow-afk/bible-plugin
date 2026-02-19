@@ -381,6 +381,100 @@ describe('NodeBuilder runtime behavior', () => {
     expect(text.characters).toBe('¹² ³ word')
   })
 
+  it('adds boundary spaces between adjacent word-like segments when parser whitespace is missing', () => {
+    const tree = createParsedNode({
+      type: 'block',
+      tagName: 'div',
+      children: [
+        createParsedNode({
+          type: 'block',
+          tagName: 'p',
+          children: [
+            createParsedNode({
+              type: 'inline',
+              tagName: 'span',
+              classes: ['wj'],
+              textContent: 'believe',
+            }),
+            createParsedNode({
+              type: 'inline',
+              tagName: 'span',
+              classes: ['wj'],
+              textContent: 'because',
+            }),
+          ],
+        }),
+      ],
+    })
+
+    const nodes = builder.build(tree)
+    const frame = nodes[0] as unknown as MockFrameNode
+    const text = frame.children[0] as MockTextNode
+
+    expect(text.characters).toBe('believe because')
+  })
+
+  it('does not add extra spaces before punctuation and does not double-insert spaces', () => {
+    const tree = createParsedNode({
+      type: 'block',
+      tagName: 'div',
+      children: [
+        createParsedNode({
+          type: 'block',
+          tagName: 'p',
+          children: [
+            createParsedNode({
+              type: 'inline',
+              tagName: 'span',
+              classes: ['wj'],
+              textContent: 'Hello',
+            }),
+            createParsedNode({
+              type: 'inline',
+              tagName: 'span',
+              classes: ['wj'],
+              textContent: ',',
+            }),
+            createParsedNode({
+              type: 'inline',
+              tagName: 'span',
+              classes: ['wj'],
+              textContent: 'world',
+            }),
+          ],
+        }),
+        createParsedNode({
+          type: 'block',
+          tagName: 'p',
+          children: [
+            createParsedNode({
+              type: 'inline',
+              tagName: 'span',
+              classes: ['wj'],
+              textContent: 'Grace ',
+            }),
+            createParsedNode({
+              type: 'inline',
+              tagName: 'span',
+              classes: ['wj'],
+              textContent: 'and truth',
+            }),
+          ],
+        }),
+      ],
+    })
+
+    const nodes = builder.build(tree)
+    const firstFrame = nodes[0] as unknown as MockFrameNode
+    const firstText = firstFrame.children[0] as MockTextNode
+    const secondFrame = nodes[1] as unknown as MockFrameNode
+    const secondText = secondFrame.children[0] as MockTextNode
+
+    expect(firstText.characters).toBe('Hello, world')
+    expect(secondText.characters).toBe('Grace and truth')
+    expect(secondText.characters).not.toContain('  ')
+  })
+
   it('skips creating empty text nodes when content is empty', () => {
     const topLevelInlineOnly = createParsedNode({
       type: 'block',

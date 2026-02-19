@@ -54,6 +54,7 @@ export interface TextSegment {
   fontName: FontName
   color: RGB
   textCase?: TextCase
+  sourceClasses: string[]
 }
 
 /**
