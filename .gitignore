@@ -25,6 +25,3 @@ dist-ssr
 *.sw?
 .envrc
 
-# Agents
-.claude/*
-CLAUDE.md
