@@ -13,6 +13,7 @@ const FRAME_WIDTH = 512
  * - Inline/text elements become TextNodes with character-level styling
  */
 export class NodeBuilder {
+  private static readonly SPACING_SENSITIVE_CLASS = 'wj'
 
   /**
    * Build Figma nodes from the ParsedNode tree
@@ -137,6 +138,9 @@ export class NodeBuilder {
       return null
     }
 
+    // Preserve readable spacing when parser output drops whitespace-only DOM text nodes.
+    const normalizedSegments = this.normalizeBoundarySpacing(nonEmptySegments)
+
     // Create text node
     const textNode = figma.createText()
 
@@ -145,7 +149,7 @@ export class NodeBuilder {
     textNode.textAutoResize = 'WIDTH_AND_HEIGHT'
 
     // Set the full text content
-    const fullText = nonEmptySegments.map(s => s.content).join('')
+    const fullText = normalizedSegments.map(s => s.content).join('')
     textNode.characters = fullText
 
     // Now set fixed width and let height adjust
@@ -164,7 +168,7 @@ export class NodeBuilder {
 
     // Apply character-level styling via setRange methods
     let offset = 0
-    for (const segment of nonEmptySegments) {
+    for (const segment of normalizedSegments) {
       const start = offset
       const end = offset + segment.content.length
 
@@ -186,6 +190,76 @@ export class NodeBuilder {
     }
 
     return textNode
+  }
+
+  /**
+   * Restores missing boundary spaces between adjacent text segments when needed.
+   * The parser intentionally drops whitespace-only nodes, so we re-insert a single
+   * space for word-like boundaries while guarding against punctuation artifacts.
+   */
+  private normalizeBoundarySpacing(segments: TextSegment[]): TextSegment[] {
+    const normalized: TextSegment[] = []
+
+    for (const segment of segments) {
+      const nextSegment: TextSegment = { ...segment }
+      const previous = normalized[normalized.length - 1]
+
+      if (
+        previous &&
+        this.hasSpacingSensitiveBoundary(previous, nextSegment) &&
+        this.shouldInsertBoundarySpace(previous.content, nextSegment.content)
+      ) {
+        nextSegment.content = ` ${nextSegment.content}`
+      }
+
+      normalized.push(nextSegment)
+    }
+
+    return normalized
+  }
+
+  private hasSpacingSensitiveBoundary(previous: TextSegment, current: TextSegment): boolean {
+    return (
+      previous.sourceClasses.includes(NodeBuilder.SPACING_SENSITIVE_CLASS) &&
+      current.sourceClasses.includes(NodeBuilder.SPACING_SENSITIVE_CLASS)
+    )
+  }
+
+  private shouldInsertBoundarySpace(previous: string, current: string): boolean {
+    if (!previous || !current) {
+      return false
+    }
+
+    const previousChar = previous.slice(-1)
+    const currentChar = current[0]
+
+    if (!previousChar || !currentChar) {
+      return false
+    }
+
+    if (/\s/u.test(previousChar) || /\s/u.test(currentChar)) {
+      return false
+    }
+
+    // Never insert before punctuation that belongs to the preceding token.
+    if (/^[,.;:!?)\]}%]/u.test(currentChar)) {
+      return false
+    }
+
+    // Never insert after opening punctuation that belongs to the following token.
+    if (/[([{]/u.test(previousChar)) {
+      return false
+    }
+
+    // Avoid splitting contractions if a segment starts with apostrophe.
+    if (currentChar === '\'' || currentChar === '’') {
+      return false
+    }
+
+    const previousLooksLikeTokenEnd = /[\p{L}\p{N}\u00B9\u00B2\u00B3\u2070-\u2079,.;:!?'"’”]/u.test(previousChar)
+    const currentLooksLikeTokenStart = /[\p{L}\p{N}\u00B9\u00B2\u00B3\u2070-\u2079"“]/u.test(currentChar)
+
+    return previousLooksLikeTokenEnd && currentLooksLikeTokenStart
   }
 
   /**
@@ -215,7 +289,7 @@ export class NodeBuilder {
         }
 
         if (content) {
-          segments.push(this.createTextSegment(content, mergedStyle))
+          segments.push(this.createTextSegment(content, mergedStyle, mergedClasses))
         }
       } else {
         // Process children recursively, passing merged classes
@@ -227,7 +301,7 @@ export class NodeBuilder {
   /**
    * Create a TextSegment from content and style
    */
-  private createTextSegment(content: string, style: FigmaStyle): TextSegment {
+  private createTextSegment(content: string, style: FigmaStyle, sourceClasses: string[]): TextSegment {
     // Determine font based on weight and style
     let fontName: FontName = FONTS.SERIF
 
@@ -245,7 +319,8 @@ export class NodeBuilder {
       fontSize: style.fontSize || 20,
       fontName,
       color: style.color || COLORS.FOREGROUND,
-      textCase: style.textCase
+      textCase: style.textCase,
+      sourceClasses
     }
   }
 }
