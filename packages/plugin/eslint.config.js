@@ -19,7 +19,7 @@ export default defineConfig([
         __html__: 'readonly',
       },
       parserOptions: {
-        project: './tsconfig.json',
+        project: ['./tsconfig.json', './tsconfig.vitest.json'],
         tsconfigRootDir: import.meta.dirname,
       },
     },

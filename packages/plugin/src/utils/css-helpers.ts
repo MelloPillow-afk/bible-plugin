@@ -98,10 +98,10 @@ const SUPERSCRIPT_MAP: Record<string, string> = {
  * @returns The text with digits converted to superscript Unicode characters
  */
 export function toSuperscript(text: string): string {
-  let superscriptText = text
+  const superscriptText = text
     .split('')
     .map(char => SUPERSCRIPT_MAP[char] || char)
     .join('')
 
-    return `${superscriptText} `
+  return `${superscriptText} `
 }

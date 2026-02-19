@@ -72,7 +72,7 @@ export const figmaMock = {
   },
   notify: vi.fn(),
   closePlugin: vi.fn(),
-  loadFontAsync: vi.fn(async () => undefined),
+  loadFontAsync: vi.fn(() => Promise.resolve(undefined)),
   createFrame: vi.fn(() => createMockFrameNode()),
   createText: vi.fn(() => createMockTextNode())
 }

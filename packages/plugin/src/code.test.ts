@@ -132,7 +132,11 @@ describe('Plugin code handler behavior', () => {
     figmaMock = createFigmaMock()
     ;(globalThis as unknown as { figma: unknown }).figma = figmaMock
 
-    originalConvert = DOMToFigmaAdapter.prototype.convert
+    const convertDescriptor = Object.getOwnPropertyDescriptor(DOMToFigmaAdapter.prototype, 'convert')
+    if (!convertDescriptor || typeof convertDescriptor.value !== 'function') {
+      throw new Error('DOMToFigmaAdapter.convert is not available')
+    }
+    originalConvert = convertDescriptor.value as (content: DOMNode) => Promise<SceneNode[]>
     originalConsoleError = console.error
 
     await import('./code')
@@ -165,9 +169,9 @@ describe('Plugin code handler behavior', () => {
     const content = createDomContent()
     let convertCalled = false
 
-    DOMToFigmaAdapter.prototype.convert = async () => {
+    DOMToFigmaAdapter.prototype.convert = () => {
       convertCalled = true
-      return []
+      return Promise.resolve([])
     }
 
     const onmessage = getMessageHandler(figmaMock)
@@ -188,9 +192,9 @@ describe('Plugin code handler behavior', () => {
     figmaMock.currentPage.selection = [selectedFrame as unknown as SceneNode]
 
     let receivedContent: DOMNode | undefined
-    DOMToFigmaAdapter.prototype.convert = async (domContent: DOMNode) => {
+    DOMToFigmaAdapter.prototype.convert = (domContent: DOMNode) => {
       receivedContent = domContent
-      return converted as unknown as SceneNode[]
+      return Promise.resolve(converted as unknown as SceneNode[])
     }
 
     const onmessage = getMessageHandler(figmaMock)
@@ -209,9 +213,7 @@ describe('Plugin code handler behavior', () => {
 
     figmaMock.currentPage.selection = [selectedFrame as unknown as SceneNode]
 
-    DOMToFigmaAdapter.prototype.convert = async () => {
-      throw new Error('conversion failed')
-    }
+    DOMToFigmaAdapter.prototype.convert = () => Promise.reject(new Error('conversion failed'))
 
     const onmessage = getMessageHandler(figmaMock)
     await onmessage(createInsertMessage(content))
