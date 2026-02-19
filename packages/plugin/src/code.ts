@@ -9,7 +9,11 @@ figma.showUI(`<script>window.location.href = "http://localhost:5173"</script>`,
   { width: 600, height: 600, themeColors: true })
 
 // Handle messages from the web app
-figma.ui.onmessage = async (msg: PluginMessage) => {
+figma.ui.onmessage = (msg: PluginMessage) => {
+  void handleMessage(msg)
+}
+
+async function handleMessage(msg: PluginMessage): Promise<void> {
   switch (msg.type) {
     case 'INSERT_PASSAGE': {
       const { content } = msg.payload
@@ -24,8 +28,7 @@ figma.ui.onmessage = async (msg: PluginMessage) => {
 
       try {
         // Convert parsed content to Figma nodes using the adapter
-
-      const adapter = new DOMToFigmaAdapter()
+        const adapter = new DOMToFigmaAdapter()
         const nodes = await adapter.convert(content)
 
         // Add all created nodes to the selected frame

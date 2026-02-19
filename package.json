@@ -10,7 +10,8 @@
     "build:web": "pnpm --filter web-app build",
     "build:plugin": "pnpm --filter plugin build",
     "build:all": "pnpm -r build",
-    "lint": "eslint .",
+    "lint": "pnpm --filter plugin lint && pnpm --filter web-app lint",
+    "check": "pnpm lint",
     "preview:web": "pnpm --filter web-app preview"
   },
   "devDependencies": {

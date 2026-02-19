@@ -5,7 +5,7 @@ import { YouVersionProvider } from '@youversion/platform-react-ui'
 import { router } from './router'
 import './styles/globals.css'
 
-const appKey = import.meta.env.VITE_YOUVERSION_APP_KEY as string
+const appKey = import.meta.env.VITE_YOUVERSION_APP_KEY
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
